@@ -93,7 +93,14 @@ description: Frankのデザイン品質を常に80〜100点に保つための普
 
 - **改行が優先**：テキストが長い場合はまず改行で対応する。シェイプのサイズは変えない
 - **横幅拡張は苦肉の策**：改行するとバランスが著しく崩れる場合のみ、オブジェクトの横幅を広げる
-- 実装: `width: "fit-content"` + `minWidth` で最小幅を保ちつつ内容に合わせて横に拡張する
+- **`calcMinWidth` ヘルパーで必要幅を自動計算してminWidthに設定する（折り返し自動防止）：**
+  ```ts
+  // 日本語全角文字 ≒ fontSize px。係数1.1で余裕を確保
+  const calcMinWidth = (lines: string[], fontSize: number, padX: number) =>
+    Math.ceil(Math.max(...lines.map(l => [...l].length)) * fontSize * 1.1) + padX * 2;
+  ```
+- テキストは `行ごとの配列` で管理し、各行を `<div>` でレンダリング（`<br />` より管理しやすい）
+- `word-break: keep-all` を全テキスト要素に設定（文字途中の折り返し防止）
 - オブジェクト内のpaddingは常に固定値を守る。テキストがpaddingに食い込むのはNG
 
 **丸（Circle）のスケールルール：**
