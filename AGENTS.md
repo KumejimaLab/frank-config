@@ -47,10 +47,18 @@
    - ローカルに未pushの変更があっても、GH優先で上書きする（`reset --hard` による上書きは仕様）。
 
 4. **GitHubバックアップとプロジェクト分離**:
-   - 作業終了時にはGitHubにプッシュしてバックアップする。
+   - 作業終了時には以下の**2つのリポジトリ**に必ずpushしてバックアップする:
+     - `frank-video`（案件フォルダ） → `KumejimaLab/frank-video`
+     - `d:\_Frank\.agents`（設定フォルダ） → `KumejimaLab/frank-config`
    - 認証情報:
      - Email: `hcx.kumejima.lab@gmail.com`
      - Password: `Human_1234`
      - Account ID: `KumejimaLab`
    - 別プロジェクト「Alan」との競合や上書きを避けるため、本プロジェクトは `frank-video` という独立したフォルダ名およびリポジトリ名で管理する。
+   - `frank-config` のpushコマンド:
+     ```powershell
+     git -C "d:\_Frank\.agents" add -A
+     git -C "d:\_Frank\.agents" commit -m "Update config"
+     git -C "d:\_Frank\.agents" -c credential.helper= -c core.askPass= push origin main
+     ```
 
